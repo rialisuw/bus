@@ -4,43 +4,59 @@
  * This is a general purpose Gradle build.
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
-apply plugin: 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0'
+    }
+}
  
-repositories {
-    mavenCentral()
+apply plugin: 'java'
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+ 
+
+ repositories {
+        mavenCentral()
+  }
+
+sourceSets {    main {
+        java {
+            srcDirs = ['src/test/resources']
+        }
+    }
+    test{
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
+ 
+ }
+ 
+junitPlatform {
+    enableStandardTestTask = true
 }
 
-sourceSets {
-	main{
-		java{
-			srcDirs = ['src/test/resources']
-		}
-	}
-	test{
-		java{
-			srcDirs = ['src/test/java']
-			}
-		}
-	}
- 
+ test {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat "full"
+        events "PASSED", "skipped", "failed", "standardOut", "standardError"
+        showStandardStreams = true
+    }
+
+    
+ }
 dependencies {
-    testImplementation(
+    testCompile(
             'org.junit.jupiter:junit-jupiter-api:5.1.0'
     )
-    testCompile(
-    			'org.junit.jupiter:junit-jupiter-api:5.1.0'
-    )
-    
-    testRuntimeOnly(
-            'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+    testRuntime(
+            'org.junit.jupiter:junit-jupiter-engine:5.1.0',
+            'org.junit.vintage:junit-vintage-engine:5.1.0',
+            'org.junit.platform:junit-platform-launcher:1.1.0',
+            'org.junit.platform:junit-platform-runner:1.1.0'
     )
 }
-test{
-    useJUnitPlatform()
-    testLogging{
-		showStandardStreams = true
-		exceptionFormat "full"
-		events "passed", "skipped", "failed", "standardOut", "standardError"
-	}
-}
-    
