@@ -35,7 +35,6 @@ public class WeirdNumber{
         wn.setNumber(i);
         System.out.println(wn.getNumber());
         System.out.println(wn.IsItWeird());
-        sc.close();
         }
-    }
+       }
 }
